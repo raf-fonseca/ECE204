@@ -112,6 +112,23 @@ vec<n> markov_chain(
   //  - All of the rows add up to '1.0' with an
   //    allowed error of eps_step
 
+    // Loop through each column
+    for (int j = 0; j < n; j++) {
+        double col_sum = 0;
+        for (int i = 0; i < n; i++) {
+            // If any number is negative, throw exception
+            if (A(i,j) < 0.0) {
+                throw std::invalid_argument ("Entry is negative");
+            }
+            col_sum += A(i,j);
+        }
+        // If columns don't add up to 1, throw exception
+        if (std::abs(1.0 - col_sum) >= n * eps_step) {
+            throw std::invalid_argument("Column does not add up to 1");
+        }
+      }
+ 
+
   // Iterate as necessary
   return vec<n>{};
 }
