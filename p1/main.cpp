@@ -127,8 +127,24 @@ vec<n> markov_chain(
             throw std::invalid_argument("Column does not add up to 1");
         }
       }
- 
+
+      // Compute v_k+1 = A * v_k
+      int i = 0; 
+      vec<n> v_current = v0;
+      vec<n> v_next = A * v_current;
+      while (norm(v_next - v_current) >= eps_step) {
+
+        v_current = v_next;
+        v_next = A * v_current;
+        i++;
+        
+        if (i >= max_iterations) {
+          throw std::invalid_argument("Max iterations have been reached");
+          break;
+        }
+
+      }
 
   // Iterate as necessary
-  return vec<n>{};
+  return v_next;
 }
